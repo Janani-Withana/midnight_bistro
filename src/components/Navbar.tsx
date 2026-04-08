@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import emberLogo from "@/assets/ember-logo.png";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -41,14 +42,22 @@ export function Navbar() {
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="relative z-10">
-            <motion.h1
-              className="font-display text-2xl md:text-3xl tracking-wider text-gradient-gold"
+          <Link to="/" className="relative z-10 flex items-center gap-3">
+            <motion.span
+              className="flex items-center gap-3"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              EMBER
-            </motion.h1>
+              <img
+                src={emberLogo}
+                alt=""
+                className="h-9 w-auto md:h-11 object-contain object-left"
+                aria-hidden
+              />
+              <span className="font-display text-2xl md:text-3xl tracking-wider text-gradient-gold pt-1 md:pt-1.5">
+                EMBER
+              </span>
+            </motion.span>
           </Link>
 
           {/* Desktop Navigation */}
