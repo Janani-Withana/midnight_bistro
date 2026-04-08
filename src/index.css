@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark Cinematic Restaurant Design System */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@layer base {
+  :root {
+    /* Core backgrounds - deep charcoal to near-black */
+    --background: 0 0% 4%;
+    --foreground: 40 20% 92%;
+
+    /* Card surfaces - slightly lighter for depth */
+    --card: 0 0% 6%;
+    --card-foreground: 40 20% 92%;
+
+    /* Popover */
+    --popover: 0 0% 5%;
+    --popover-foreground: 40 20% 92%;
+
+    /* Primary - Muted Gold */
+    --primary: 42 65% 55%;
+    --primary-foreground: 0 0% 4%;
+
+    /* Secondary - Deep Wine */
+    --secondary: 350 40% 18%;
+    --secondary-foreground: 40 20% 92%;
+
+    /* Muted - Subtle grays */
+    --muted: 0 0% 12%;
+    --muted-foreground: 40 10% 55%;
+
+    /* Accent - Warm Amber glow */
+    --accent: 32 80% 45%;
+    --accent-foreground: 0 0% 4%;
+
+    /* Destructive - Soft Crimson */
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 40 20% 92%;
+
+    /* Borders & inputs */
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: 42 65% 55%;
+
+    --radius: 0.5rem;
+
+    /* Custom gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 4%) 0%, hsl(350 30% 8%) 50%, hsl(160 20% 6%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 5%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(42 65% 55%) 0%, hsl(32 80% 45%) 100%);
+    --gradient-wine: linear-gradient(180deg, hsl(350 40% 18%) 0%, hsl(350 40% 12%) 100%);
+    
+    /* Shadows */
+    --shadow-glow: 0 0 60px -15px hsl(42 65% 55% / 0.15);
+    --shadow-card: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
+    --shadow-elevated: 0 10px 40px -10px hsl(0 0% 0% / 0.6);
+
+    /* Sidebar (keeping for compatibility) */
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 40 20% 92%;
+    --sidebar-primary: 42 65% 55%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 40 20% 92%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 42 65% 55%;
+  }
+
+  .dark {
+    /* Same as root - dark by default */
+    --background: 0 0% 4%;
+    --foreground: 40 20% 92%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Selection styling */
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  /* Hero text gradient */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(42 65% 55%) 0%, hsl(32 80% 55%) 50%, hsl(42 65% 65%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Noise texture overlay */
+  .noise-overlay {
+    position: relative;
+  }
+
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Glass effect for navbar */
+  .glass-dark {
+    background: hsl(0 0% 4% / 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Glow effects */
+  .glow-gold {
+    box-shadow: 0 0 40px -10px hsl(42 65% 55% / 0.3);
+  }
+
+  .glow-wine {
+    box-shadow: 0 0 40px -10px hsl(350 40% 25% / 0.4);
+  }
+
+  /* Animated underline for links */
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: hsl(var(--primary));
+    transition: width 0.3s ease;
+  }
+
+  .link-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Menu card hover glow */
+  .menu-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 25px 50px -12px hsl(0 0% 0% / 0.5),
+      0 0 40px -10px hsl(42 65% 55% / 0.15);
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Elegant thin scrollbar */
+  .scrollbar-elegant::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-elegant::-webkit-scrollbar-track {
+    background: hsl(0 0% 8%);
+  }
+
+  .scrollbar-elegant::-webkit-scrollbar-thumb {
+    background: hsl(0 0% 20%);
+    border-radius: 3px;
+  }
+
+  .scrollbar-elegant::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+}

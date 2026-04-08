@@ -1,0 +1,21 @@
+{
+  "name": "midnight-bistro-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Midnight Bistro",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test src/tests/",
+    "db:init": "node scripts/initDb.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.1.1",
+    "pg": "^8.13.0"
+  }
+}

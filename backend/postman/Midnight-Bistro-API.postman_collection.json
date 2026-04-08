@@ -1,0 +1,464 @@
+{
+  "info": {
+    "name": "Midnight Bistro API",
+    "description": "REST API for Midnight Bistro restaurant website. Admin endpoints require `Authorization: Bearer <token>` (get token from POST /api/auth/login).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3001" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"secret\",\n  \"name\": \"John Doe\",\n  \"adminSecret\": \"\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"secret\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories (public)",
+      "item": [
+        {
+          "name": "List categories",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/categories"
+          }
+        },
+        {
+          "name": "Get category by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/categories/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Menu items (public)",
+      "item": [
+        {
+          "name": "List menu items",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/menu-items"
+          }
+        },
+        {
+          "name": "List menu items by category",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/menu-items?categoryId=1"
+          }
+        },
+        {
+          "name": "Get menu item by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/menu-items/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "List orders",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/orders"
+          }
+        },
+        {
+          "name": "Get order by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/orders/1"
+          }
+        },
+        {
+          "name": "Create order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"items\": [{\"menuItemId\": 1, \"quantity\": 2}],\n  \"tableNumber\": 5,\n  \"notes\": \"\"\n}"
+            },
+            "url": "{{baseUrl}}/api/orders"
+          }
+        },
+        {
+          "name": "Update order",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": "{{baseUrl}}/api/orders/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "List reservations",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reservations"
+          }
+        },
+        {
+          "name": "Get reservation by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reservations/1"
+          }
+        },
+        {
+          "name": "Create reservation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"+1234567890\",\n  \"date\": \"2026-03-20\",\n  \"time\": \"19:00\",\n  \"guests\": \"4\",\n  \"occasion\": \"anniversary\",\n  \"notes\": \"Window seat\"\n}"
+            },
+            "url": "{{baseUrl}}/api/reservations"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List users",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users"
+          }
+        },
+        {
+          "name": "Get user by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users/1"
+          }
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"new@example.com\",\n  \"password\": \"secret\",\n  \"name\": \"New User\"\n}"
+            },
+            "url": "{{baseUrl}}/api/users"
+          }
+        },
+        {
+          "name": "Update user",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\"\n}"
+            },
+            "url": "{{baseUrl}}/api/users/1"
+          }
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/users/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Gallery (public)",
+      "item": [
+        {
+          "name": "List gallery images",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/gallery"
+          }
+        },
+        {
+          "name": "Get gallery image by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/gallery/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "All requests require header: Authorization: Bearer {{token}}. Get token from Auth > Login.",
+      "item": [
+        {
+          "name": "Get current admin user",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/admin/me"
+          }
+        },
+        {
+          "name": "Upload image",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "image", "type": "file", "src": "" }
+              ]
+            },
+            "url": "{{baseUrl}}/api/admin/upload-image"
+          }
+        },
+        {
+          "name": "Admin - Categories",
+          "item": [
+            {
+              "name": "List categories",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/categories"
+              }
+            },
+            {
+              "name": "Get category",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/categories/1"
+              }
+            },
+            {
+              "name": "Create category",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Starters\",\n  \"sortOrder\": 0\n}"
+                },
+                "url": "{{baseUrl}}/api/admin/categories"
+              }
+            },
+            {
+              "name": "Update category",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Appetizers\",\n  \"sortOrder\": 0\n}"
+                },
+                "url": "{{baseUrl}}/api/admin/categories/1"
+              }
+            },
+            {
+              "name": "Delete category",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/categories/1"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin - Menu items",
+          "item": [
+            {
+              "name": "List menu items",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/menu-items"
+              }
+            },
+            {
+              "name": "Get menu item",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/menu-items/1"
+              }
+            },
+            {
+              "name": "Create menu item",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"categoryId\": 1,\n  \"name\": \"Grilled Salmon\",\n  \"description\": \"Wild-caught with herbs\",\n  \"price\": 28,\n  \"imageUrl\": \"\",\n  \"available\": true\n}"
+                },
+                "url": "{{baseUrl}}/api/admin/menu-items"
+              }
+            },
+            {
+              "name": "Update menu item",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Grilled Salmon\",\n  \"price\": 32,\n  \"available\": true\n}"
+                },
+                "url": "{{baseUrl}}/api/admin/menu-items/1"
+              }
+            },
+            {
+              "name": "Delete menu item",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/menu-items/1"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin - Users (read)",
+          "item": [
+            {
+              "name": "List users",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/users"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin - Orders (read)",
+          "item": [
+            {
+              "name": "List orders",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/orders"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin - Reservations (read)",
+          "item": [
+            {
+              "name": "List reservations",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/reservations"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin - Gallery",
+          "item": [
+            {
+              "name": "List gallery",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/gallery"
+              }
+            },
+            {
+              "name": "Create gallery image",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"imageUrl\": \"http://localhost:3001/uploads/photo.jpg\",\n  \"title\": \"Restaurant Interior\",\n  \"caption\": \"Ambiance\"\n}"
+                },
+                "url": "{{baseUrl}}/api/admin/gallery"
+              }
+            },
+            {
+              "name": "Delete gallery image",
+              "request": {
+                "method": "DELETE",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/gallery/1"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
