@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
@@ -16,7 +16,7 @@ import {
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { setAuthToken } from "@/lib/api";
+import { logoutAdmin, refreshAdminSession } from "@/lib/api";
 import { AdminReservations } from "@/components/admin/AdminReservations";
 import { AdminMenuManager } from "@/components/admin/AdminMenuManager";
 import { AdminGalleryManager } from "@/components/admin/AdminGalleryManager";
@@ -45,9 +45,18 @@ const recentActivity = [
   { time: "3 hr ago", text: "New gallery photo uploaded", type: "gallery" },
 ];
 
+const ADMIN_REFRESH_INTERVAL_MS = 10 * 60 * 1000;
+
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      refreshAdminSession();
+    }, ADMIN_REFRESH_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, []);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -106,8 +115,8 @@ export default function AdminDashboard() {
           <div className="p-4 border-t border-border">
             <button
               type="button"
-              onClick={() => {
-                setAuthToken(null);
+              onClick={async () => {
+                await logoutAdmin();
                 window.location.href = "/admin";
               }}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-muted-foreground hover:text-destructive transition-colors font-body"

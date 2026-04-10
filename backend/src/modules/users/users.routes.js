@@ -1,7 +1,10 @@
 import { Router } from "express";
+import { requireAuth, requireAdmin } from "../../common/middlewares/index.js";
 import * as usersController from "./users.controller.js";
 
 const router = Router();
+
+router.use(requireAuth, requireAdmin);
 
 router.get("/", usersController.list);
 router.get("/:id", usersController.getById);

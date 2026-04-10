@@ -1,5 +1,12 @@
 export function getAuthToken(): string | null;
+export function getRefreshToken(): string | null;
+export function setAuthTokens(accessToken: string | null, refreshToken: string | null): void;
 export function setAuthToken(token: string | null): void;
+export function applyAuthResponse(
+  body: { token?: string; refreshToken?: string } | null | undefined
+): boolean;
+export function refreshAdminSession(): Promise<boolean>;
+export function logoutAdmin(): Promise<void>;
 export function request(path: string, options?: RequestInit): Promise<unknown>;
 
 export function getHealth(): Promise<unknown>;

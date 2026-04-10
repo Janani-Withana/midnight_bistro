@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "test": "node --test src/tests/",
-    "db:init": "node scripts/initDb.js"
+    "db:init": "node scripts/initDb.js",
+    "db:clear": "node scripts/clearDb.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

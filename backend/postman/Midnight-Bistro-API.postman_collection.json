@@ -1,12 +1,13 @@
 {
   "info": {
     "name": "Midnight Bistro API",
-    "description": "REST API for Midnight Bistro restaurant website. Admin endpoints require `Authorization: Bearer <token>` (get token from POST /api/auth/login).",
+    "description": "REST API for Midnight Bistro.\n\n**Auth:** Admin accounts use `POST /api/auth/login` (same as other users). Admins receive a short-lived **access** `token` plus **refreshToken** (set `ADMIN_SECRET` for first admin via `POST /api/auth/register`). Use `Authorization: Bearer {{token}}` on `/api/admin/*`.\n\n**Variables:** `token` and `refreshToken` are filled automatically from Login / Register / Refresh **Tests** when the response includes them.\n\n**Refresh:** `POST /api/auth/refresh` with body `{ \"refreshToken\": \"...\" }` returns new `token` and `refreshToken` (rotation).\n\n**Logout:** `POST /api/auth/logout` with `{ \"refreshToken\": \"...\" }` revokes that refresh token (204).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     { "key": "baseUrl", "value": "http://localhost:3001" },
-    { "key": "token", "value": "" }
+    { "key": "token", "value": "" },
+    { "key": "refreshToken", "value": "" }
   ],
   "item": [
     {
@@ -27,26 +28,141 @@
       "item": [
         {
           "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "  const json = pm.response.json();",
+                  "  if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "  if (json.refreshToken) pm.collectionVariables.set('refreshToken', json.refreshToken);",
+                  "} catch (e) {}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"secret\",\n  \"name\": \"John Doe\",\n  \"adminSecret\": \"\"\n}"
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"your-secure-password\",\n  \"name\": \"Admin\",\n  \"adminSecret\": \"YOUR_ADMIN_SECRET_FROM_ENV\"\n}"
             },
+            "description": "Set `adminSecret` to the same value as `ADMIN_SECRET` in server `.env` to create an **admin** user. Otherwise creates a normal `user` (no admin API access).",
             "url": "{{baseUrl}}/api/auth/register"
           }
         },
         {
           "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "  const json = pm.response.json();",
+                  "  if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "  if (json.refreshToken) pm.collectionVariables.set('refreshToken', json.refreshToken);",
+                  "} catch (e) {}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"secret\"\n}"
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"your-secure-password\"\n}"
             },
+            "description": "Returns `user` and `token`. **Admin** users also get `refreshToken` for session refresh.",
             "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Refresh session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "  const json = pm.response.json();",
+                  "  if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "  if (json.refreshToken) pm.collectionVariables.set('refreshToken', json.refreshToken);",
+                  "} catch (e) {}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "description": "Admin-only. Issues new access `token` and rotated `refreshToken`. Requires a valid refresh token row in the database.",
+            "url": "{{baseUrl}}/api/auth/refresh"
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 204) {",
+                  "  pm.collectionVariables.set('refreshToken', '');",
+                  "  pm.collectionVariables.set('token', '');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "description": "Revokes the given refresh token (204 No Content).",
+            "url": "{{baseUrl}}/api/auth/logout"
+          }
+        },
+        {
+          "name": "Promote to admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "  const json = pm.response.json();",
+                  "  if (json.token) pm.collectionVariables.set('token', json.token);",
+                  "  if (json.refreshToken) pm.collectionVariables.set('refreshToken', json.refreshToken);",
+                  "} catch (e) {}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"user-password\",\n  \"adminSecret\": \"YOUR_ADMIN_SECRET_FROM_ENV\"\n}"
+            },
+            "description": "Sets `role` to admin for an existing user when email, password, and `adminSecret` match. Returns new admin tokens.",
+            "url": "{{baseUrl}}/api/auth/promote-admin"
           }
         }
       ]
@@ -172,11 +288,13 @@
     },
     {
       "name": "Users",
+      "description": "All routes require `Authorization: Bearer {{token}}` (admin). Use Auth > Login first.",
       "item": [
         {
           "name": "List users",
           "request": {
             "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": "{{baseUrl}}/api/users"
           }
         },
@@ -184,6 +302,7 @@
           "name": "Get user by ID",
           "request": {
             "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": "{{baseUrl}}/api/users/1"
           }
         },
@@ -191,11 +310,15 @@
           "name": "Create user",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"new@example.com\",\n  \"password\": \"secret\",\n  \"name\": \"New User\"\n}"
             },
+            "description": "Creates a non-admin user (e.g. for orders). Admin-only.",
             "url": "{{baseUrl}}/api/users"
           }
         },
@@ -203,7 +326,10 @@
           "name": "Update user",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Updated Name\"\n}"
@@ -215,6 +341,7 @@
           "name": "Delete user",
           "request": {
             "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": "{{baseUrl}}/api/users/1"
           }
         }
@@ -241,7 +368,7 @@
     },
     {
       "name": "Admin",
-      "description": "All requests require header: Authorization: Bearer {{token}}. Get token from Auth > Login.",
+      "description": "Requires `Authorization: Bearer {{token}}` with an **admin** access token from Login/Register (or after Refresh). Missing user or invalid session → **401**; authenticated but not admin → **403**.",
       "item": [
         {
           "name": "Get current admin user",
@@ -333,6 +460,14 @@
                 "method": "GET",
                 "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
                 "url": "{{baseUrl}}/api/admin/menu-items"
+              }
+            },
+            {
+              "name": "List menu items by category",
+              "request": {
+                "method": "GET",
+                "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+                "url": "{{baseUrl}}/api/admin/menu-items?categoryId=1"
               }
             },
             {
